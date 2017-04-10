@@ -875,13 +875,6 @@ ifneq ($(strip $(TARGET_BOARD_PLATFORM)),sofia3gr)
 RECOVERY_RESOURCE_ZIP := $(TARGET_OUT)/etc/recovery-resource.dat
 endif
 
-ifeq ($(TARGET_ROCKCHIP_PCBATEST),true)
-pcba_core := $(call intermediates-dir-for,EXECUTABLES,pcba_core)/pcba_core
-recovery_contents := $(TOPDIR)device/rockchip/common/recovery_contents.sh
-else
-recovery_contents := $(TOPDIR)device/rockchip/common/recovery_contents.sh
-endif
-
 ifeq ($(recovery_resources_private),)
   $(info No private recovery resources for TARGET_DEVICE $(TARGET_DEVICE))
 endif
@@ -973,7 +966,6 @@ $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTFS) $(MKBOOTIMG) $(MINIGZIP) \
 	$(hide) rm -rf $(TARGET_RECOVERY_ROOT_OUT)/res/*
 	$(hide) cp -rf $(recovery_resources_common)/* $(TARGET_RECOVERY_ROOT_OUT)/res
 	$(hide) cp -f $(recovery_font) $(TARGET_RECOVERY_ROOT_OUT)/res/images/font.png
-	$(recovery_contents) $(TARGET_PRODUCT) $(PRODUCT_OUT) $(TARGET_BOARD_PLATFORM) $(TARGET_ROCKCHIP_PCBATEST) $(TARGET_ARCH)
 	$(hide) $(foreach item,$(recovery_resources_private), \
 	  cp -rf $(item) $(TARGET_RECOVERY_ROOT_OUT)/)
 	$(hide) $(foreach item,$(recovery_fstab), \
